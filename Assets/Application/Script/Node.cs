@@ -15,6 +15,7 @@ namespace Company.Product
     public class Node : MonoBehaviour
     {
 #pragma warning disable 649
+        [SerializeField] GameObject m_hitArea;
         [SerializeField] MeshRenderer m_meshRenderer;
         [SerializeField] Material m_selectedMaterial;
 #pragma warning restore 649
@@ -32,13 +33,17 @@ namespace Company.Product
         // Start is called before the first frame update
         void Start()
         {
+            if(!m_hitArea)
+            {
+                this.m_hitArea = gameObject;
+            }
             this.m_defaultMaterial = m_meshRenderer.material;
             Observable.EveryUpdate()
                       .Where(_ => Input.GetMouseButtonDown(0))
                       .Subscribe(_ =>
                       {
                             if(Environment.Instance.Raycast(out var hit) &&
-                               hit.collider.gameObject == gameObject)
+                               hit.collider.gameObject == m_hitArea)
                             {
                                 m_onFocusSubject.OnNext(Unit.Default);
                             }
