@@ -38,6 +38,17 @@ namespace Company.Product
                           }
                       })
                       .AddTo(this);
+            Observable.EveryUpdate()
+                      .Where(_ => Input.GetKey(KeyCode.D))
+                      .Where(_ => m_selectedEdge)
+                      .Subscribe(_ =>
+                      {
+                          m_edgeList.Remove(m_selectedEdge.GetComponent<Edge>());
+                          Destroy(m_selectedEdge.gameObject);
+                          this.m_selectedEdge = null;
+                          SetLine();
+                      })
+                      .AddTo(this);
         }
 
         private void SetEvent(Edge edge)
